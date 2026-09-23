@@ -1,0 +1,33 @@
+{
+  "name": "matterhorn",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "$path": "src/ReplicatedStorage",
+      "Remotes": {
+        "$className": "Folder",
+        "UpdateStats": { "$className": "RemoteEvent" },
+        "WeatherChanged": { "$className": "RemoteEvent" },
+        "RiskEvent": { "$className": "RemoteEvent" },
+        "GameLog": { "$className": "RemoteEvent" },
+        "CampReached": { "$className": "RemoteEvent" },
+        "RestAtCamp": { "$className": "RemoteFunction" },
+        "BuyGear": { "$className": "RemoteFunction" },
+        "AttemptSummit": { "$className": "RemoteFunction" },
+        "RetreatRequest": { "$className": "RemoteFunction" }
+      }
+    },
+
+    "ServerScriptService": {
+      "$path": "src/ServerScriptService"
+    },
+
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$path": "src/StarterPlayer/StarterPlayerScripts"
+      }
+    }
+  }
+}
