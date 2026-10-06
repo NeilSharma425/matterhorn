@@ -15,6 +15,9 @@ local Constants = {
 
 	StatUpdateThrottleSeconds = 1,
 
+	HutShopMarkup = 1.5, -- gear costs more at Hörnli Hut than back in Zermatt
+	RestStormClockCost = 3, -- resting still burns daylight margin before the afternoon storm
+
 	RiskEvents = {
 		Rockfall = {
 			baseChance = 0.05, -- scaled by camp.rockfallRisk and weather.rockfallRiskMultiplier

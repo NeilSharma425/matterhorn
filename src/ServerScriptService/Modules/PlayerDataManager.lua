@@ -20,6 +20,8 @@ local function defaultProfile()
 		stormClock = 0,
 		weatherState = "Clear",
 		bestCampReached = 1,
+		ascending = true, -- false once the player turns around from the summit (or retreats early)
+		hutDepartureClock = nil, -- stormClock value when they left Hörnli Hut; drives the Solvay turnaround rule
 	}
 end
 
@@ -68,6 +70,21 @@ end
 function PlayerDataManager.Remove(player)
 	PlayerDataManager.Save(player)
 	PlayerDataManager._profiles[player.UserId] = nil
+end
+
+-- A failed attempt doesn't erase gear or money -- it just sends the
+-- climber back to Zermatt for another go, same as how an unsuccessful (or
+-- aborted) real expedition just means trying again another day.
+function PlayerDataManager.ResetExpedition(profile)
+	profile.stamina = Constants.MaxStamina
+	profile.health = Constants.MaxHealth
+	profile.focus = Constants.MaxFocus
+	profile.campIndex = 1
+	profile.alive = true
+	profile.stormClock = 0
+	profile.weatherState = "Clear"
+	profile.ascending = true
+	profile.hutDepartureClock = nil
 end
 
 function PlayerDataManager.Clamp(profile)

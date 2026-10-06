@@ -46,6 +46,34 @@ only), so nothing was lost there — apply a Roblox `Material` (Rock/Snow) or a
 6. Apply a `Material` (try `Rock` low down, `Snow`/`Ice` — or a second
    thin MeshPart cap — above ~4000m) for texture without needing an image.
 
+## Placing the route's camp markers against the mesh
+
+`Camps.lua` now models the real Hörnli Ridge waypoints (Schwarzsee, Hörnli
+Hut, the lower broken ridge, Solvay Hut between the Moseley Slabs, the
+Shoulder, the fixed ropes, the summit — see that file's header comment for
+sources). To line each camp's checkpoint part up with the actual mesh
+geometry at roughly the right height, assuming the mesh's own vertical
+extent runs base-of-mountain to summit (check this by eye once it's
+imported — if the model includes a wider skirt of surrounding terrain,
+the real base will sit higher up the mesh's own bounding box than 0%):
+
+| Camp | Altitude | Fraction up the mesh (0 = base, 1 = summit) |
+|---|---|---|
+| Zermatt | 1620 m | 0.000 (below the mesh entirely — it's the valley town) |
+| Schwarzsee | 2583 m | 0.337 |
+| Hörnli Hut | 3260 m | 0.574 |
+| Hut Rocks (Lower Ridge) | 3600 m | 0.693 |
+| Solvay Hut | 4003 m | 0.834 |
+| The Shoulder | 4220 m | 0.910 |
+| The Fixed Ropes | 4380 m | 0.966 |
+| Summit | 4478 m | 1.000 |
+
+`Y = meshBottomY + fraction * meshHeightInStuds`, where `meshBottomY` is
+the MeshPart's lowest point after you've positioned it and `meshHeightInStuds`
+is its `Size.Y` (2858, per the scaling above). The Hörnli Hut and above
+should also sit on the mesh's actual northeast ridge line, not just at the
+right height — nudge X/Z by eye so the checkpoint parts trace that ridge.
+
 Re-running the decimation at a different triangle budget (e.g. if 15K still
 imports too slowly, or you want more detail up close) just needs the
 original Release asset re-downloaded — see the repo's `model` release —
