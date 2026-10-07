@@ -168,8 +168,8 @@ function UIController.Init()
 	-- Action buttons
 	local actionsPanel = Instance.new("Frame")
 	actionsPanel.Name = "ActionsPanel"
-	actionsPanel.Size = UDim2.new(0, 200, 0, 230)
-	actionsPanel.Position = UDim2.new(1, -216, 1, -246)
+	actionsPanel.Size = UDim2.new(0, 200, 0, 120)
+	actionsPanel.Position = UDim2.new(1, -216, 1, -136)
 	actionsPanel.AnchorPoint = Vector2.new(0, 0)
 	actionsPanel.BackgroundTransparency = 1
 	actionsPanel.Parent = screenGui
@@ -179,21 +179,12 @@ function UIController.Init()
 	actionsLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 	actionsLayout.Parent = actionsPanel
 
-	local advanceButton = makeButton(actionsPanel, "Advance", 1)
-	local retreatButton = makeButton(actionsPanel, "Retreat", 2)
-	local restButton = makeButton(actionsPanel, "Rest", 3)
-	local shopButton = makeButton(actionsPanel, "Gear Shop", 4)
+	-- Advancing/retreating up the ridge happens by physically walking into
+	-- the route's checkpoints (see CheckpointController), not a button --
+	-- only Rest and the Gear Shop are player-initiated actions.
+	local restButton = makeButton(actionsPanel, "Rest", 1)
+	local shopButton = makeButton(actionsPanel, "Gear Shop", 2)
 
-	advanceButton.MouseButton1Click:Connect(function()
-		if UIController._callbacks.Advance then
-			UIController._callbacks.Advance()
-		end
-	end)
-	retreatButton.MouseButton1Click:Connect(function()
-		if UIController._callbacks.Retreat then
-			UIController._callbacks.Retreat()
-		end
-	end)
 	restButton.MouseButton1Click:Connect(function()
 		if UIController._callbacks.Rest then
 			UIController._callbacks.Rest()

@@ -44,20 +44,6 @@ Remotes.GameLog.OnClientEvent:Connect(function(message)
 	UIController.PushLog(message, Color3.fromRGB(200, 200, 200))
 end)
 
-UIController.OnAction("Advance", function()
-	local ok, result = Remotes.AttemptSummit:InvokeServer()
-	if not ok then
-		UIController.PushLog(tostring(result), Color3.fromRGB(255, 150, 150))
-	end
-end)
-
-UIController.OnAction("Retreat", function()
-	local ok, result = Remotes.RetreatRequest:InvokeServer()
-	if not ok then
-		UIController.PushLog(tostring(result), Color3.fromRGB(255, 150, 150))
-	end
-end)
-
 UIController.OnAction("Rest", function()
 	local ok, result = Remotes.RestAtCamp:InvokeServer()
 	if ok then

@@ -18,6 +18,14 @@ local Constants = {
 	HutShopMarkup = 1.5, -- gear costs more at Hörnli Hut than back in Zermatt
 	RestStormClockCost = 3, -- resting still burns daylight margin before the afternoon storm
 
+	-- Progression is walking the (to-scale) mountain physically, not
+	-- clicking a button -- see CheckpointController. WalkSpeed is slowed
+	-- down on technical ground so the Moseley Slab/fixed ropes feel like
+	-- scrambling rather than a jog; Roblox's own default is 16.
+	BaseWalkSpeed = 16,
+	MinWalkSpeed = 8,
+	WalkSpeedDifficultyFactor = 0.4, -- speed = Base * (1 - factor * camp.technicalDifficulty)
+
 	RiskEvents = {
 		Rockfall = {
 			baseChance = 0.05, -- scaled by camp.rockfallRisk and weather.rockfallRiskMultiplier

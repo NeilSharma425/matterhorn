@@ -30,6 +30,23 @@ and guide-service route notes (Blackbird Guides, 57hours, Alpine Ascents):
   real defining hazard — not altitude sickness (the summit is only 4478m),
   but the afternoon thunderstorm buildup that alpine starts (leaving the
   hut ~3:30-4:30am) are specifically timed to beat.
+- **Progression is physical, not a button.** The mountain mesh is scaled
+  to ~550x a default Roblox character's height (see the mesh README), and
+  `CheckpointController` advances/retreats a player's camp automatically
+  when their character walks into the next/previous checkpoint part — no
+  "Advance" button exists. `WalkSpeed` is also slowed on technical ground
+  (scaled by each camp's `technicalDifficulty`), so the Moseley Slab and
+  fixed-rope sections feel like scrambling, not a jog. This is also what
+  gives the climb real duration, instead of needing an artificial timer.
+
+  **Caveat you'll hit in Studio:** the real Hörnli Ridge's upper sections
+  are closer to a scramble/climb than a walk (the route gains 1218m in
+  about 5 real hours, much of it on rock steep enough that Roblox's
+  humanoid physics won't just walk up it at any WalkSpeed — it'll slide
+  back down). Build the actual walkable surface as a switchbacking path
+  carved into/along the mesh (common in climbing-sim games) rather than
+  the mesh's literal rock face, and reserve the mesh itself for visuals
+  and the parts the player isn't meant to walk directly on.
 
 ## Project layout
 
@@ -50,11 +67,16 @@ assets/models/matterhorn       The real Matterhorn mesh + Studio import instruct
 4. Import the mountain mesh: follow
    `assets/models/matterhorn/README.md` (Studio's Import 3D on the `.obj`,
    then the exact Size/placement math is in that file).
-5. Place a checkpoint `Part` for each camp in `Camps.lua` (by `id`) along
-   the ridge, roughly per the height-fraction table in the mesh README.
-6. Hit Play. The HUD (stamina/health/focus/money, weather, Advance/Retreat/
-   Rest/Gear Shop buttons) is built entirely in `ClientMain.client.lua` —
-   no Studio GUI setup needed.
+5. Create a `Checkpoints` folder directly in `Workspace`, and place one
+   `Part` per camp in `Camps.lua`, each **named exactly to that camp's
+   `id`** (`Zermatt`, `Schwarzsee`, `HornliHut`, `LowerRidge`, `SolvayHut`,
+   `Shoulder`, `FixedRopes`, `Summit`) — roughly per the height-fraction
+   table in the mesh README. Make them `CanCollide = false`, `CanTouch =
+   true` trigger volumes spanning the walkable path at that point, not
+   solid obstacles.
+6. Hit Play. The HUD (stamina/health/focus/money, weather, Rest/Gear Shop
+   buttons) is built entirely in `ClientMain.client.lua` — no Studio GUI
+   setup needed. Walk into each checkpoint in order to progress.
 
 Player progress (money, gear owned, best camp reached) persists via
 `DataStoreService`, which only works once the place is published (Studio

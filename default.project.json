@@ -13,9 +13,7 @@
         "GameLog": { "$className": "RemoteEvent" },
         "CampReached": { "$className": "RemoteEvent" },
         "RestAtCamp": { "$className": "RemoteFunction" },
-        "BuyGear": { "$className": "RemoteFunction" },
-        "AttemptSummit": { "$className": "RemoteFunction" },
-        "RetreatRequest": { "$className": "RemoteFunction" }
+        "BuyGear": { "$className": "RemoteFunction" }
       }
     },
 
