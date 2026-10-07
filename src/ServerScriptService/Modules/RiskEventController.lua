@@ -61,7 +61,7 @@ function RiskEventController.Check(player)
 	local weatherConf = WeatherController.GetStateConfig(profile)
 	local isDescending = not profile.ascending
 
-	local overdue = profile.ascending and RouteRules.IsOverdueAtSolvay(profile, profile.hutDepartureClock)
+	local overdue = RouteRules.IsOverdueAtSolvay(profile)
 	local overallMultiplier = overdue and RouteRules.OverdueRiskMultiplier or 1
 
 	local events = {}

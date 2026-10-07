@@ -59,12 +59,18 @@ function CampController.Advance(player)
 	end
 
 	-- The real alpine start: leaving Hörnli Hut in the dark for the summit
-	-- push. This is the one moment that sets the turnaround clock and pays
-	-- out the Headlamp's daylight-margin discount.
+	-- push. This is the one moment that starts the storm clock and the
+	-- Solvay turnaround timer.
 	if currentCamp.id == "HornliHut" then
-		profile.hutDepartureClock = profile.stormClock
-		WeatherController.ApplyAlpineStartDiscount(profile)
+		profile.hutDepartureRealTime = os.clock()
+		WeatherController.ApplyAlpineStartTiming(profile)
 	end
+
+	-- How long that leg actually took to walk, vs. the real-route-derived
+	-- target (Camps.lua targetSeconds) -- this is the stopwatch for tuning
+	-- checkpoint spacing/WalkSpeed in Studio against the 1-hour design goal.
+	local elapsedSeconds = os.clock() - profile.legStartRealTime
+	profile.legStartRealTime = os.clock()
 
 	profile.campIndex = nextIndex
 	profile.bestCampReached = math.max(profile.bestCampReached, nextIndex)
@@ -76,7 +82,11 @@ function CampController.Advance(player)
 	end
 
 	PlayerDataManager.Clamp(profile)
-	return true, nextCamp
+	return true, {
+		camp = nextCamp,
+		elapsedSeconds = elapsedSeconds,
+		targetSeconds = currentCamp.targetSeconds,
+	}
 end
 
 -- Moving away from the summit, down the same ridge. Also how a player

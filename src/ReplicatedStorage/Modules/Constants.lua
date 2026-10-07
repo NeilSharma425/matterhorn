@@ -18,13 +18,20 @@ local Constants = {
 	HutShopMarkup = 1.5, -- gear costs more at Hörnli Hut than back in Zermatt
 	RestStormClockCost = 3, -- resting still burns daylight margin before the afternoon storm
 
+	-- The whole point: feels like actually climbing the Matterhorn, just
+	-- compressed from the real ~8-hour door-to-door time (summed
+	-- Camps.lua legHours) to about 1 hour of real play. Camps.lua uses
+	-- this to derive each leg's targetSeconds (legHours * this).
+	RouteCompressionSecondsPerRealHour = 450, -- 3600s / 8h
+
 	-- Progression is walking the (to-scale) mountain physically, not
-	-- clicking a button -- see CheckpointController. WalkSpeed is slowed
-	-- down on technical ground so the Moseley Slab/fixed ropes feel like
-	-- scrambling rather than a jog; Roblox's own default is 16.
-	BaseWalkSpeed = 16,
-	MinWalkSpeed = 8,
-	WalkSpeedDifficultyFactor = 0.4, -- speed = Base * (1 - factor * camp.technicalDifficulty)
+	-- clicking a button -- see CheckpointController. WalkSpeed is
+	-- deliberately slower than Roblox's own default (16) -- this is a
+	-- climb, not a jog -- and slows further on technical ground so the
+	-- Moseley Slab/fixed ropes feel like scrambling.
+	BaseWalkSpeed = 10,
+	MinWalkSpeed = 4,
+	WalkSpeedDifficultyFactor = 0.5, -- speed = Base * (1 - factor * camp.technicalDifficulty)
 
 	RiskEvents = {
 		Rockfall = {

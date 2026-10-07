@@ -52,7 +52,12 @@ local function handleCrossing(player, campIndex)
 		if ok then
 			StatsBroadcaster.Push(player, profile)
 			applyWalkSpeedForCampIndex(player, profile.campIndex)
-			Remotes.CampReached:FireClient(player, { camp = result, ascending = profile.ascending })
+			Remotes.CampReached:FireClient(player, {
+				camp = result.camp,
+				ascending = profile.ascending,
+				elapsedSeconds = result.elapsedSeconds,
+				targetSeconds = result.targetSeconds,
+			})
 		else
 			Remotes.GameLog:FireClient(player, tostring(result))
 		end

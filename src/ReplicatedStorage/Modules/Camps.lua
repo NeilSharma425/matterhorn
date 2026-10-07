@@ -14,7 +14,22 @@
 --
 -- `legHours` is the real guidebook time for the leg *above* this camp (i.e.
 -- the hours to climb from this camp to the next one on the way up); it's
--- used to calibrate staminaCostToReach and isn't itself gameplay data.
+-- used to calibrate staminaCostToReach, and -- scaled by
+-- Constants.RouteCompressionSecondsPerRealHour below -- `targetSeconds` is
+-- how long that same leg should take to physically walk in-game. The real
+-- route sums to 8 hours door-to-door (Zermatt to summit); compressed to a
+-- 1-hour play session, every camp's targetSeconds adds up to exactly 3600.
+-- This is the number to build each leg's actual walking path against (see
+-- assets/models/matterhorn/README.md) -- and the server logs each leg's
+-- real elapsed time against this target as you playtest, so you can tune
+-- path length/switchbacks until it matches.
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Constants = require(ReplicatedStorage.Modules.Constants)
+
+local function compress(legHours)
+	return legHours * Constants.RouteCompressionSecondsPerRealHour
+end
 
 local Camps = {
 	{
@@ -27,6 +42,7 @@ local Camps = {
 		technicalDifficulty = 0,
 		staminaCostToReach = 0,
 		legHours = 0.75, -- walk/cable car up to Schwarzsee
+		targetSeconds = compress(0.75), -- 337.5s
 		hasShop = true,
 	},
 	{
@@ -39,6 +55,7 @@ local Camps = {
 		technicalDifficulty = 0.1,
 		staminaCostToReach = 5,
 		legHours = 2.25, -- ~2-2.5h marked trail to the hut
+		targetSeconds = compress(2.25), -- 1012.5s
 	},
 	{
 		id = "HornliHut",
@@ -50,6 +67,7 @@ local Camps = {
 		technicalDifficulty = 0.2,
 		staminaCostToReach = 14,
 		legHours = 1.25, -- fast scrambling through the lower broken rock
+		targetSeconds = compress(1.25), -- 562.5s
 		hasShop = true, -- at hut markup -- see GearConfig
 	},
 	{
@@ -62,6 +80,7 @@ local Camps = {
 		technicalDifficulty = 0.35,
 		staminaCostToReach = 18,
 		legHours = 1.0,
+		targetSeconds = compress(1.0), -- 450s
 	},
 	{
 		id = "SolvayHut",
@@ -73,6 +92,7 @@ local Camps = {
 		technicalDifficulty = 0.4, -- the Moseley Slab, graded III-
 		staminaCostToReach = 14,
 		legHours = 1.5, -- Upper Moseley Slab back to the ridge crest, up to the Shoulder
+		targetSeconds = compress(1.5), -- 675s
 		isEmergencyShelter = true,
 		isTurnaroundCheckpoint = true,
 	},
@@ -86,6 +106,7 @@ local Camps = {
 		technicalDifficulty = 0.55,
 		staminaCostToReach = 21,
 		legHours = 0.75, -- the fixed-rope headwall
+		targetSeconds = compress(0.75), -- 337.5s
 	},
 	{
 		id = "FixedRopes",
@@ -97,6 +118,7 @@ local Camps = {
 		technicalDifficulty = 0.65,
 		staminaCostToReach = 11,
 		legHours = 0.5,
+		targetSeconds = compress(0.5), -- 225s
 	},
 	{
 		id = "Summit",
@@ -108,6 +130,7 @@ local Camps = {
 		technicalDifficulty = 0.7,
 		staminaCostToReach = 7,
 		legHours = 0,
+		targetSeconds = 0,
 	},
 }
 

@@ -21,7 +21,8 @@ local function defaultProfile()
 		weatherState = "Clear",
 		bestCampReached = 1,
 		ascending = true, -- false once the player turns around from the summit (or retreats early)
-		hutDepartureClock = nil, -- stormClock value when they left Hörnli Hut; drives the Solvay turnaround rule
+		hutDepartureRealTime = nil, -- os.clock() when they left Hörnli Hut; drives the storm clock + Solvay turnaround rule
+		legStartRealTime = os.clock(), -- os.clock() when they entered the current camp; for the per-leg timing stopwatch
 	}
 end
 
@@ -84,7 +85,8 @@ function PlayerDataManager.ResetExpedition(profile)
 	profile.stormClock = 0
 	profile.weatherState = "Clear"
 	profile.ascending = true
-	profile.hutDepartureClock = nil
+	profile.hutDepartureRealTime = nil
+	profile.legStartRealTime = os.clock()
 end
 
 function PlayerDataManager.Clamp(profile)

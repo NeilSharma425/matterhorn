@@ -33,9 +33,29 @@ Remotes.RiskEvent.OnClientEvent:Connect(function(event)
 	UIController.PushLog(string.format("%s (-%d)", event.message, math.floor(event.damage)), eventColors[event.type])
 end)
 
+local function formatSeconds(seconds)
+	seconds = math.floor(seconds + 0.5)
+	return string.format("%dm%02ds", seconds // 60, seconds % 60)
+end
+
 Remotes.CampReached.OnClientEvent:Connect(function(data)
 	local camp = data.camp
-	if camp then
+	if not camp then
+		return
+	end
+	if data.elapsedSeconds and data.targetSeconds and data.targetSeconds > 0 then
+		local onPace = data.elapsedSeconds <= data.targetSeconds
+		UIController.PushLog(
+			string.format(
+				"Reached %s (%d m) in %s (target %s)",
+				camp.name,
+				camp.altitude,
+				formatSeconds(data.elapsedSeconds),
+				formatSeconds(data.targetSeconds)
+			),
+			onPace and Color3.fromRGB(150, 230, 150) or Color3.fromRGB(230, 170, 80)
+		)
+	else
 		UIController.PushLog(string.format("Reached %s (%d m).", camp.name, camp.altitude), Color3.fromRGB(255, 255, 255))
 	end
 end)

@@ -48,6 +48,28 @@ and guide-service route notes (Blackbird Guides, 57hours, Alpine Ascents):
   the mesh's literal rock face, and reserve the mesh itself for visuals
   and the parts the player isn't meant to walk directly on.
 
+- **The whole climb is compressed to about 1 hour** of real play, down from
+  the real route's ~8-hour door-to-door time (every `legHours` in
+  `Camps.lua` summed). That gives a clean **450 game-seconds per real
+  route-hour**, stored as `Constants.RouteCompressionSecondsPerRealHour`
+  and used to derive each camp's `targetSeconds` — how long that leg
+  should take to walk. Those add up to exactly 3600s (descent isn't
+  included; this is an ascent-only target per the project's current
+  scope). The storm clock is scaled the same way (a real ~9.5h daylight
+  margin before Thunderstorm → ~4275 compressed seconds), and the Solvay
+  turnaround rule now checks real elapsed seconds since leaving the hut
+  directly, rather than storm-clock units.
+
+  **I can't playtest Studio myself**, so exact path length/WalkSpeed to
+  hit these targets depends on how you actually lay out the switchback
+  trail. To close that loop, the server logs a stopwatch every time you
+  cross a checkpoint — `GameLog`/the HUD log shows e.g. "Reached Hörnli
+  Hut (3260 m) in 14m32s (target 9m23s)" — so you can lengthen/shorten
+  that leg's path in Studio and re-test until actual matches target,
+  rather than me guessing blind. Target seconds per leg (Zermatt onward):
+  Schwarzsee 337.5s, Hörnli Hut 1012.5s, Lower Ridge 562.5s, Solvay Hut
+  450s, Shoulder 675s, Fixed Ropes 337.5s, Summit 225s.
+
 ## Project layout
 
 ```

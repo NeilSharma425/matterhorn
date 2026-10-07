@@ -13,19 +13,21 @@ local function stateForClock(clock)
 	return chosen
 end
 
--- Real alpine starts (leaving Hörnli Hut ~3:30-4:30am, in the dark) buy
--- climbers most of the daylight margin before afternoon storms. Headlamp
--- gear represents having actually done the alpine start; CampController
--- calls this once, exactly when the player departs Hörnli Hut for the
--- summit push.
-function WeatherController.ApplyAlpineStartDiscount(profile)
-	if profile.gear.Headlamp then
-		profile.stormClock = math.max(0, profile.stormClock - WeatherConfig.alpineStartClockDiscount)
-	end
+-- Real alpine starts (leaving Hörnli Hut ~3:30-4:30am, in the dark) are what
+-- buy climbers the daylight margin before afternoon storms -- without a
+-- Headlamp you couldn't actually have left in the dark, so the clock starts
+-- with a chunk of that margin already burned. CampController calls this
+-- once, exactly when the player departs Hörnli Hut for the summit push.
+function WeatherController.ApplyAlpineStartTiming(profile)
+	profile.stormClock = profile.gear.Headlamp and 0 or WeatherConfig.lateStartPenalty
 end
 
+-- The storm clock models the summit-day push specifically, not the
+-- gear-up/approach the day before -- it only starts ticking once the player
+-- has left Hörnli Hut (profile.hutDepartureRealTime gets set at that exact
+-- moment by CampController.Advance).
 function WeatherController.Update(profile, dt)
-	if not profile.alive then
+	if not profile.alive or not profile.hutDepartureRealTime then
 		return false
 	end
 
