@@ -4,23 +4,30 @@ Source: ["Matterhorn mountain (Mount Cervinia) Switzerland"](https://sketchfab.c
 by LibanCiel (Sketchfab). Uploaded as a repo Release asset (`model` tag) and
 decimated here for Roblox.
 
-- `matterhorn.obj` — use this one. Roblox Studio's Bulk Import (Avatar tab →
-  Import 3D, or drag into the 3D Viewport/Explorer) reads OBJ directly.
-- `matterhorn.glb` — kept as a backup/reference; Studio does not import glTF
-  natively as of this writing, so prefer the OBJ.
+There are two versions of the mountain. Pick one:
 
-Original mesh was 1.29M vertices / 428,731 triangles — far past what a single
-Roblox MeshPart should carry (practical ceiling is ~10-20K triangles; more
-than that tanks import reliability and in-game frame time). It's been
-decimated with quadric edge-collapse to **15,000 triangles**, which keeps the
-silhouette (the four ridges, the Hörnli/Zmutt/Furggen/Lion faces) intact at
-the distance players will actually see it from.
+- **`matterhorn.obj` — simple, one piece, lower detail.** A single MeshPart,
+  decimated from the 1.29M-vertex/428,731-triangle source down to **15,000
+  triangles** (quadric edge-collapse), since Roblox hard-caps a single
+  MeshPart at 21,000 triangles. One import, one Size edit (below). Keeps
+  the silhouette (the four ridges, the Hörnli/Zmutt/Furggen/Lion faces)
+  intact at the distance players will actually see it from.
+- **`full_res_parts/` — every triangle, 24 pieces.** The complete,
+  undecimated mesh, split into 24 MeshParts (~17,864 triangles each) so
+  none exceed Roblox's limit. Noticeably more detail up close, at the cost
+  of 24 manual imports instead of 1. Its footprint is also narrower (X/Z
+  squashed to 75% of this file's, same real height) -- see that folder's
+  own README for exact import steps.
+- `matterhorn.glb` — kept as a backup/reference; Studio does not import glTF
+  natively as of this writing, so prefer the OBJ(s) above.
 
 No baked photo textures existed in the source (flat/vertex-shaded materials
 only), so nothing was lost there — apply a Roblox `Material` (Rock/Snow) or a
 `SurfaceAppearance` in Studio after import rather than expecting a texture.
 
-## Importing into Studio
+## Importing into Studio (single-piece `matterhorn.obj`)
+
+For the full-resolution 24-part version instead, see `full_res_parts/README.md`.
 
 1. Avatar tab → **Import 3D** → select `matterhorn.obj`.
 2. It imports as a single MeshPart. Rename it `MatterhornMesh`.
@@ -70,9 +77,13 @@ the real base will sit higher up the mesh's own bounding box than 0%):
 
 `Y = meshBottomY + fraction * meshHeightInStuds`, where `meshBottomY` is
 the MeshPart's lowest point after you've positioned it and `meshHeightInStuds`
-is its `Size.Y` (2858, per the scaling above). The Hörnli Hut and above
-should also sit on the mesh's actual northeast ridge line, not just at the
-right height — nudge X/Z by eye so the checkpoint parts trace that ridge.
+is its `Size.Y` (2858 in both versions — the full-res parts only squash
+X/Z, not Y). The Hörnli Hut and above should also sit on the mesh's actual
+northeast ridge line, not just at the right height — nudge X/Z by eye so
+the checkpoint parts trace that ridge. Note the full-res version's X/Z
+footprint is narrower (75%) than this single-piece file's, so the same
+absolute X/Z checkpoint coordinates won't carry over between the two —
+re-eyeball placement if you switch versions.
 
 Re-running the decimation at a different triangle budget (e.g. if 15K still
 imports too slowly, or you want more detail up close) just needs the
